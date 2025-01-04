@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "TeachingEvaluation",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "自动评教",
     "permissions": [
         "scripting",

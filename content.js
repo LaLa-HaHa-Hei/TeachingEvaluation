@@ -7,7 +7,7 @@ if (!document.querySelector('#service-iframe')) {
 }
 
 async function main() {
-    // 由于每次评价完上次页面DOM会被消耗，所以需要每次都获取allList，而不能用for去遍历allList！！！
+    // 由于每次评价完上次页面DOM会被消毁，所以需要每次都获取allList，而不能用for去遍历allList！！！
     while (true) {
         const wpList = document.querySelectorAll('uni-view.wp') // 未评
         const wwcList = document.querySelectorAll('uni-view.wwc') // 未完成
@@ -18,6 +18,7 @@ async function main() {
         }
         const firstClassElement = allList[0].parentElement.parentElement.parentElement
         console.log(firstClassElement)
+        // 课程评教
         const kcpj = firstClassElement.querySelector('uni-view.box-hjjs-footer-kcpj')
         if (kcpj) {
             kcpj.click()
@@ -30,6 +31,7 @@ async function main() {
             }
             await sleep(1000)
         }
+        // 教师评教
         const jspj = firstClassElement.querySelector('uni-view.box-hjjs-footer-jspj')
         if (jspj) {
             jspj.click()
@@ -49,7 +51,6 @@ async function sleep(delay) {
     return new Promise((resolve) => setTimeout(resolve, delay))
 }
 
-// 打开评价页面后自动评价
 async function evaluate() {
     // .box2-1列表
     const box2List = document.querySelectorAll('uni-view.box2-1');
@@ -65,9 +66,15 @@ async function evaluate() {
         uniListCellList[1].click()
     }
 
-    //给最后两个输入“无”
-    for (let i = box2List.length - 2; i < box2List.length; i++) {
-        const textareaElement = box2List[i].querySelector('textarea.uni-textarea-textarea');
+    //给最后两个输入 “课堂氛围很好，老师很认真” 和 “无”
+    {
+        const textareaElement = box2List[box2List.length - 2].querySelector('textarea.uni-textarea-textarea');
+        const event = new InputEvent('input');
+        textareaElement.value = "课堂氛围很好，老师很认真";
+        textareaElement.dispatchEvent(event);
+    }
+    {
+        const textareaElement = box2List[box2List.length - 1].querySelector('textarea.uni-textarea-textarea');
         const event = new InputEvent('input');
         textareaElement.value = "无";
         textareaElement.dispatchEvent(event);
@@ -76,5 +83,5 @@ async function evaluate() {
     // 提交
     document.querySelector('.box3-1').click()
     await sleep(1000)
-    document.querySelector(".confirm.btn").click(); // 不知道为啥不行
+    document.querySelector(".confirm.btn").click();
 }
